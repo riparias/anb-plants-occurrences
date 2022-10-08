@@ -1,14 +1,16 @@
-name: "my_dataset_title"
+name: "Targeted monitoring of invasice alien crayfishes in LIFE RIPARIAS areas in Flanders"
 output_dir: "../docs"
+include: ["static"]
 navbar:
-  title: "my_dataset_shortname"
+  title: "anb-crayfishes-occurrences"
   left:
     - text: "Darwin Core mapping"
       href: dwc_mapping.html
   right:
     - icon: fa-github fa-lg
-      href: my_dataset_repository
+      href: https://github.com/riparias/anb-crayfishes-occurrences
 output:
   html_document:
     theme: yeti
     df_print: paged
+    css: "static/css/riparias.css"

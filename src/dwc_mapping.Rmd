@@ -57,8 +57,8 @@ Create a data frame `occurrences` from the source data:
 
 ```{r read_data}
 occurrences <- readxl::read_excel(
-  path = here("data", "raw", "rivierkreeften_ANB september 2022.xlsx")) %>%
-  mutate(datum = as.character(.data$datum))
+  path = here("data", "raw", "Plantenmonitoring RIPARIAS (Vlaanderen).xlsx"),
+  sheet = "Data_inventarisaties_opgekuist")
 ```
 
 Preview data:
@@ -86,6 +86,7 @@ occurrences <-
 )
 ```
 
+Show changes:
 
 ```{r show_roze_waterlelie}
 occurrences %>% 

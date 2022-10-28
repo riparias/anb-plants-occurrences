@@ -1,6 +1,6 @@
 ---
 title: "Darwin Core mapping"
-subtitle: "For: monitoring of invasive alien crayfishes in the Flemish part of the LIFE RIPARIAS areas"
+subtitle: "For: monitoring of LIFE RIPARIAS invasive alien plants in the Flemish part of the LIFE RIPARIAS areas"
 author:
 - Damiano Oldoni
 date: "`r Sys.Date()`"

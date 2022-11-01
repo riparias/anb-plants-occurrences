@@ -71,29 +71,35 @@ occurrences %>% head(n = 10)
 
 ## Add scientific name where missing
 
-Column `soort` contains both scientific name and vernacular name in Dutch; Example: `"Reuzenbalsemien / Impatiens glandulifera"`. The only exceptions are the following values: 
-- `roze waterlelie` which has no scientific name. We add it (_Nymphaea marliacea_)
-- `brede waterpest`: not a specific taxon. To be removed
-- `smalle waterpest`: not a specific taxon. To be removed
+Column `soort` contains vernacular names in Dutch, sometimes with the scientific name as prefix: 
+
+```{r soort}
+occurrences %>%
+  distinct(soort)
+```
+We add the scientific name where missing:
+- `roze waterlelie`: _Nymphaea marliacea_
+- `brede waterpest`: _Elodea canadensis_
+- `smalle waterpest`: _Elodea nuttallii_
 
 ```{r add_Nymphaea_marliacea}
 occurrences <-
   occurrences %>%
-  filter(!stringr::str_detect(soort, "waterpest")) %>%
-  mutate(soort = if_else(soort == "roze waterlelie", 
-                         "Nymphaea marliacea / roze waterlelie",
-                         soort)
+  mutate(soort = recode(
+    soort,
+    "roze waterlelie" = "roze waterlelie / Nymphaea marliacea",
+    "brede waterpest" = "brede waterpest / Elodea canadensis",
+    "smalle waterpest" = "smalle waterpest / Elodea nuttallii"
+  )
 )
 ```
 
-Show changes:
+Show distinct values of column `soort`:
 
-```{r show_roze_waterlelie}
+```{r show_soort_after_mapping}
 occurrences %>% 
-  filter(stringr::str_detect(soort, "roze waterlelie")) %>%
-  select(soort)
+  distinct(soort)
 ```
-
 
 ## Tidy data
 

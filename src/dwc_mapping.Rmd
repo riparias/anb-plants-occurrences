@@ -194,7 +194,7 @@ dwc_occurrence <- DBI::dbGetQuery(con, dwc_occurrence_sql)
 message("DONE")
 ```
 
-reate [Measurement Or Facts](https://rs.gbif.org/extension/dwc/measurements_or_facts_2022-02-02.xml) extension:
+Create [Measurement Or Facts](https://rs.gbif.org/extension/dwc/measurements_or_facts_2022-02-02.xml) extension:
 
 ```{r mof}
 dwc_mof_sql <- glue::glue_sql(

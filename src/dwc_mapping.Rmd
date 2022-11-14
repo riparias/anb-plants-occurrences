@@ -16,7 +16,7 @@ output:
 # Setup 
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = TRUE, message = FALSE)
 ```
 
 Install required libraries (only if the libraries have not been installed before):
@@ -30,7 +30,8 @@ required <- c("tidyverse",
               "sf",
               "DBI",
               "RSQLite",
-              "digest"
+              "digest",
+              "testthat"
 )
 if (!all(required %in% installed)) {
   install.packages(required[!required %in% installed])
@@ -56,94 +57,104 @@ Create a data frame `occurrences` from the source data:
 
 ```{r read_data}
 occurrences <- readxl::read_excel(
-  path = here("data", "raw", "rivierkreeften_ANB september 2022.xlsx")) %>%
-  mutate(datum = as.character(.data$datum))
+  path = here("data", "raw", "Plantenmonitoring RIPARIAS (Vlaanderen).xlsx"),
+  sheet = "Data_inventarisaties_opgekuist",
+  col_types = "text")
 ```
 
 Preview data:
 
 ```{r}
-occurrences %>% head(n = 5)
+occurrences %>% head(n = 10)
 ```
 
 # Process source data
 
-Define vector with the IAS crayfishes of interest:
+## Clean data
 
-```{r IAS_crayfishes}
-ias_crayfishes <- c(
-  "Pontastacus leptodactylus", 
-  "Pacifastacus leniusculus", 
-  "Faxonius limosus",
-  "Faxonius rusticus",
-  "Procambarus clarkii",
-  "Procambarus acutus",
-  "Procambarus fallax"
+Abundance values:
+
+```{r abundantie}
+occurrences %>% count(abundantie)
+```
+
+The value `O / Occasional / >5%O / Occasional / >5%` is of course a typo. We improve it:
+
+```{r improve_abundantie}
+occurrences$abundantie <-  recode(
+  occurrences$abundantie,
+  "O / Occasional / >5%O / Occasional / >5%" = "O / Occasional / >5%"
 )
+```
+
+Check improved values:
+
+```{r check_improved_abundantie}
+occurrences %>% count(abundantie)
+```
+
+## Add scientific name where missing
+
+Column `soort` contains vernacular names in Dutch, sometimes with the scientific name as prefix: 
+
+```{r soort}
+occurrences %>%
+  distinct(soort)
+```
+We add the scientific name where missing:
+- `roze waterlelie`: _Nymphaea marliacea_
+- `brede waterpest`: _Elodea canadensis_
+- `smalle waterpest`: _Elodea nuttallii_
+
+```{r add_Nymphaea_marliacea}
+occurrences <-
+  occurrences %>%
+  mutate(soort = recode(
+    soort,
+    "roze waterlelie" = "roze waterlelie / Nymphaea marliacea",
+    "brede waterpest" = "brede waterpest / Elodea canadensis",
+    "smalle waterpest" = "smalle waterpest / Elodea nuttallii"
+  )
+)
+```
+
+Show distinct values of column `soort`:
+
+```{r show_soort_after_mapping}
+occurrences %>% 
+  distinct(soort)
 ```
 
 ## Tidy data
 
-Pivot data to convert the columns `Pontastacus leptodactylus`, `Pacifastacus leniusculus`, `Faxonius limosus`, `Faxonius rusticus`, `Procambarus clarkii`, `Procambarus acutus` and `Procambarus fallax` in two columns called `species` and `n`:
+Extract vernacular names from column `soort`:
 
-```{r tidy_data}
+```{r vernacular}
 occurrences <- 
   occurrences %>%
-  tidyr::pivot_longer(
-    cols = dplyr::one_of(ias_crayfishes), 
-    names_to = "species", 
-    values_to = "n"
-  )
+  mutate(
+    vernacularName = stringr::str_extract(
+      string = .data$soort,
+      pattern = "(.*?)(?=\\/)")) %>%
+  mutate(vernacularName = stringr::str_trim(.data$vernacularName))
 ```
 
-Set `n` to 0 if `NA`:
+Extract scientific names from column `soort`:
 
-```{r na_to_zero}
+```{r scientific}
 occurrences <- 
   occurrences %>%
-  mutate(n = dplyr::if_else(is.na(.data$n), 0, .data$n))
+  mutate(
+    scientificName = stringr::str_extract(
+      string = .data$soort,
+      pattern = "(?<=\\/)(.*)")) %>%
+  mutate(scientificName = stringr::str_trim(scientificName))
 ```
 
-## Change coordinate system
+Mapped values:
 
-Data are provided in Belgian Lambert72 ([EPSG 31370](https://epsg.io/31370)) coordinates. DwC accepts data in WGS84 ([EPSG 4326](https://epsg.io/4326)) only.
-
-```{r change_crs}
-occurrences <- 
-  occurrences %>% 
-  st_as_sf(crs = st_crs(31370), coords = c("x", "y")) %>%
-  st_transform(crs = 4326)
-coords <- dplyr::as_tibble(st_coordinates(occurrences))
-occurrences <- 
-  dplyr::as_tibble(occurrences) %>% 
-  dplyr::bind_cols(coords) %>%
-  dplyr::select(-.data$geometry)
-```
-
-Preview:
-
-```{r}
-occurrences %>% head(5)
-```
-
-## Generate hashes for species names
-
-We generate a hash based on the species name as saved in column `species`. This is needed to create a unique `occurrenceID` of the form `eventID:hash` where `eventID` will be later defined during the mapping. As long as the species name doesn't change, the hash and so the `occurrenceID` will be stable:
-
-```{r generate_hashes}
-vdigest <- Vectorize(digest)
-# Generate hashes
-occurrences <-
-  occurrences %>% 
-  mutate(species_name_hash = vdigest(.data$species, algo = "md5"))
-```
-
-Preview:
-
-```{r show_hashes}
-occurrences %>%
-  select(dplyr::starts_with("species")) %>%
-  distinct()
+```{r sc_vernacular}
+occurrences %>% distinct(scientificName, vernacularName)
 ```
 
 # Create database
@@ -183,12 +194,46 @@ dwc_occurrence <- DBI::dbGetQuery(con, dwc_occurrence_sql)
 message("DONE")
 ```
 
+Create [Measurement Or Facts](https://rs.gbif.org/extension/dwc/measurements_or_facts_2022-02-02.xml) extension:
+
+```{r mof}
+dwc_mof_sql <- glue::glue_sql(
+  readr::read_file(here::here("sql", "dwc_mof.sql")), 
+  .con = con
+)
+dwc_mof <- DBI::dbGetQuery(con, dwc_mof_sql)
+```
+
+Disconnect from SQLite database:
+
+```{r disconnect}
+DBI::dbDisconnect(con)
+```
+
 # Save data to CSV
 
 ```{r save_csv}
-write_csv(dwc_event, here::here("data", "processed", "event.csv"), na = "")
 write_csv(
-  dwc_occurrence, here::here("data", "processed", "occurrence.csv"),
+  x = dwc_event,
+  file = here::here("data", "processed", "event.csv"),
   na = ""
 )
+write_csv(
+  x = dwc_occurrence, 
+  file = here::here("data", "processed", "occurrence.csv"),
+  na = ""
+)
+write_csv(
+  x = dwc_mof, 
+  file = here::here("data", "processed", "mof.csv"),
+  na = ""
+)
+```
+
+# Test output
+
+Load tests and run them to validate the DwC mapping:
+
+```{r run_tests}
+source(here::here("tests", "test_dwc_event_occurrence_mof.R"))
 ```

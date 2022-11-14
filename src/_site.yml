@@ -1,14 +1,14 @@
-name: "Targeted monitoring of invasice alien crayfishes in LIFE RIPARIAS areas in Flanders"
+name: "Monitoring of LIFE RIPARIAS invasive alien plants in the Flemish part of the LIFE RIPARIAS areas"
 output_dir: "../docs"
 include: ["static"]
 navbar:
-  title: "anb-crayfishes-occurrences"
+  title: "anb-plants-occurrences"
   left:
     - text: "Darwin Core mapping"
       href: dwc_mapping.html
   right:
     - icon: fa-github fa-lg
-      href: https://github.com/riparias/anb-crayfishes-occurrences
+      href: https://github.com/riparias/anb-plants-occurrences
 output:
   html_document:
     theme: yeti

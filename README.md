@@ -6,7 +6,7 @@ This repository contains the functionality to standardize the crayfishes data fr
 
 ## Workflow
 
-[source data](https://github.com/riparias/anb-crayfishes-occurrences/tree/main/data/raw) → Darwin Core [mapping script](https://riparias.github.io/anb-crayfishes-occurrences/dwc_mapping.html) → generated [Darwin Core files](https://github.com/riparias/anb-crayfishes-occurrences/tree/main/data/processed)
+[source data](https://github.com/riparias/anb-plants-occurrences/tree/main/data/raw) → Darwin Core [mapping script](https://riparias.github.io/anb-plants-occurrences/dwc_mapping.html) → generated [Darwin Core files](https://github.com/riparias/anb-plants-occurrences/tree/main/data/processed)
 
 
 ## Published dataset
@@ -21,12 +21,13 @@ The repository structure is based on [Cookiecutter Data Science](http://drivenda
 ```
 ├── README.md              : Description of this repository
 ├── LICENSE                : Repository license
-├── anb-crayfishes-occurrences.Rproj : RStudio project file
+├── anb-plants-occurrences.Rproj : RStudio project file
 ├── .gitignore             : Files and directories to be ignored by git
 |
 ├── sql                    : Darwin Core transformations
 │   ├── dwc_event.sql
-│   └── dwc_occurrence.sql
+│   ├── dwc_occurrence.sql
+│   └── dwc_mof.sql
 |
 ├── src
 │   ├── dwc_mapping.Rmd    : Darwin Core mapping script

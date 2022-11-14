@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Damiano Oldoni" />
+
+<meta name="date" content="2022-11-14" />
+
+<title>Darwin Core mapping</title>
+
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="static/css/riparias.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">anb-crayfishes-occurrences</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="dwc_mapping.html">Darwin Core mapping</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/riparias/anb-crayfishes-occurrences">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Darwin Core mapping</h1>
+<h3 class="subtitle">For: monitoring of LIFE RIPARIAS invasive alien
+plants in the Flemish part of the LIFE RIPARIAS areas</h3>
+<h4 class="author">Damiano Oldoni</h4>
+<h4 class="date">2022-11-14</h4>
+
+</div>
+
+
+<div id="setup" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Setup</h1>
+<p>Install required libraries (only if the libraries have not been
+installed before):</p>
+<pre class="r"><code>installed &lt;- rownames(installed.packages())
+required &lt;- c(&quot;tidyverse&quot;,
+              &quot;tidylog&quot;,
+              &quot;here&quot;,
+              &quot;readxl&quot;,
+              &quot;sf&quot;,
+              &quot;DBI&quot;,
+              &quot;RSQLite&quot;,
+              &quot;digest&quot;,
+              &quot;testthat&quot;
+)
+if (!all(required %in% installed)) {
+  install.packages(required[!required %in% installed])
+}</code></pre>
+<p>Load libraries:</p>
+<pre class="r"><code>library(tidyverse)      # To do data science
+library(tidylog)        # To provide feedback on dplyr functions
+library(here)           # To find files
+library(readxl)         # To read Excel files
+library(sf)             # To convert coordinate systems
+library(DBI)            # To work with databases
+library(RSQLite)        # To work with SQLite databases in R
+library(digest)         # To create hashes</code></pre>
+</div>
+<div id="read-source-data" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Read source data</h1>
+<p>Create a data frame <code>occurrences</code> from the source
+data:</p>
+<pre class="r"><code>occurrences &lt;- readxl::read_excel(
+  path = here(&quot;data&quot;, &quot;raw&quot;, &quot;Plantenmonitoring RIPARIAS (Vlaanderen).xlsx&quot;),
+  sheet = &quot;Data_inventarisaties_opgekuist&quot;,
+  col_types = &quot;text&quot;)</code></pre>
+<p>Preview data:</p>
+<pre class="r"><code>occurrences %&gt;% head(n = 10)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["_record_id"],"name":[1],"type":["chr"],"align":["left"]},{"label":["_latitude"],"name":[2],"type":["chr"],"align":["left"]},{"label":["_longitude"],"name":[3],"type":["chr"],"align":["left"]},{"label":["_created_at"],"name":[4],"type":["chr"],"align":["left"]},{"label":["afbakening"],"name":[5],"type":["chr"],"align":["left"]},{"label":["regio"],"name":[6],"type":["chr"],"align":["left"]},{"label":["Waterloop"],"name":[7],"type":["chr"],"align":["left"]},{"label":["locatie"],"name":[8],"type":["chr"],"align":["left"]},{"label":["oever"],"name":[9],"type":["chr"],"align":["left"]},{"label":["bedekking_"],"name":[10],"type":["chr"],"align":["left"]},{"label":["photos"],"name":[11],"type":["chr"],"align":["left"]},{"label":["invasieve_"],"name":[12],"type":["chr"],"align":["left"]},{"label":["soort"],"name":[13],"type":["chr"],"align":["left"]},{"label":["abundantie"],"name":[14],"type":["chr"],"align":["left"]},{"label":["geschatte_"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"0004214c-7ac9-461f-abbe-97792ab09214","2":"50.756159599999997","3":"4.5767552","4":"2022-08-09 08:21:10 UTC","5":"NA","6":"Dijlevallei","7":"Laan","8":"Binnen de 5 meter van de waterloop,Op de oever,Tussen de 5 en 10m van de waterloop","9":"Beide oevers","10":"NA","11":"5d3c78a7-e979-4e89-a35c-70b3bf17546f","12":"yes","13":"Reuzenbalsemien / Impatiens glandulifera","14":"A / Abundant/ 25% - 50%","15":"50"},{"1":"000a85db-16ca-42a3-aa7e-6f4dd2c17b63","2":"50.983896899299999","3":"4.4858480617399996","4":"2022-07-26 14:17:20 UTC","5":"NA","6":"Zennevallei","7":"Zenne","8":"Tussen de 10 en 20m van de waterloop","9":"Linker oever","10":"NA","11":"7fd738a8-8a41-45ba-88a5-ec139dca5b84","12":"yes","13":"Reuzenbalsemien / Impatiens glandulifera","14":"A / Abundant/ 25% - 50%","15":"5"},{"1":"004e3362-9645-4d0a-b2e7-237aabc4ddce","2":"50.739978882999999","3":"4.3325779214500013","4":"2022-08-05 11:58:16 UTC","5":"NA","6":"Zennevallei","7":"Molenbeek","8":"Binnen de 5 meter van de waterloop,Op de oever","9":"Beide oevers","10":"NA","11":"49f29320-cdc7-4831-a824-8336da1e48b0","12":"yes","13":"Japanse duizendknoop/Fallopia japanica","14":"D / Dominant / >50%","15":"500"},{"1":"00585478-14df-4bda-8dc1-0b9615187b15","2":"50.746567345400003","3":"4.2783879116200012","4":"2022-09-06 06:44:15 UTC","5":"NA","6":"Zennevallei","7":"Molenbeek","8":"Binnen de 5 meter van de waterloop,Op de oever","9":"Beide oevers","10":"NA","11":"c277aeaf-3197-4c14-a119-0f054b7f8457","12":"yes","13":"Reuzenbalsemien / Impatiens glandulifera","14":"D / Dominant / >50%","15":"200"},{"1":"006be444-0e15-429d-95a6-d476067bf00e","2":"51.002915157099999","3":"4.6144724513700002","4":"2022-08-31 07:49:48 UTC","5":"NA","6":"Dijlevallei","7":"Spuibeek 2de arm","8":"In waterelement","9":"Beide oevers","10":"0%","11":"af2e6f91-4ca6-4d59-8fd4-5a656f273e51","12":"yes","13":"Parelvederkruid / Myriophyllum aquaticum","14":"O / Occasional / >5%","15":"5"},{"1":"009e6c05-7fdf-4269-9542-c21862874f33","2":"50.959090254199999","3":"4.5671476605099999","4":"2022-09-19 09:57:50 UTC","5":"2","6":"Dijlevallei","7":"Weesbeek","8":"Binnen de 5 meter van de waterloop,Op de oever","9":"Linker oever","10":"40%","11":"7245c602-f4ce-4f19-b1f6-9f3735724f5d","12":"yes","13":"Reuzenbalsemien / Impatiens glandulifera","14":"D / Dominant / >50%","15":"500"},{"1":"00b0ddd6-4907-4762-901a-ad79910ee208","2":"50.7717606","3":"4.6129483000000002","4":"2022-08-09 12:20:05 UTC","5":"NA","6":"Dijlevallei","7":"Laan","8":"Tussen de 20 en 50m van de waterloop","9":"Rechter oever","10":"NA","11":"6188ea42-b5bd-45c2-bc48-8274f2f6e53c","12":"yes","13":"Reuzenbalsemien / Impatiens glandulifera","14":"A / Abundant/ 25% - 50%","15":"25"},{"1":"00da32c7-d80a-4c84-a467-f5953f9acb38","2":"50.916157200000001","3":"4.3699336000000013","4":"2022-07-12 11:48:59 UTC","5":"NA","6":"Zennevallei","7":"Tangebeek","8":"Binnen de 5 meter van de waterloop,Op de oever,Tussen de 10 en 20m van de waterloop,Tussen de 5 en 10m van de waterloop","9":"Beide oevers","10":"NA","11":"e3880513-5768-4258-b84f-02d6cdfced9b","12":"yes","13":"Japanse duizendknoop/Fallopia japanica","14":"D / Dominant / >50%","15":"1000"},{"1":"01103ac8-b486-4d86-9676-171df95bf029","2":"50.9152040775","3":"4.2844000831200013","4":"2022-09-21 12:13:12 UTC","5":"NA","6":"Zennevallei","7":"Amelvonnesbeek","8":"Binnen de 5 meter van de waterloop,Tussen de 5 en 10m van de waterloop","9":"Linker oever","10":"NA","11":"7df5b382-e38a-4138-ba99-10b5e0f8a1b7","12":"yes","13":"Japanse duizendknoop/Fallopia japanica","14":"D / Dominant / >50%","15":"100"},{"1":"011d2dfb-5569-4a08-a49c-80d743802fa4","2":"50.757499500000002","3":"4.5785027999999999","4":"2022-08-09 08:35:59 UTC","5":"NA","6":"Dijlevallei","7":"Laan","8":"Binnen de 5 meter van de waterloop,Op de oever","9":"Rechter oever","10":"NA","11":"8c94bda3-f178-4077-80c6-8370c3947c0f","12":"yes","13":"Reuzenbalsemien / Impatiens glandulifera","14":"A / Abundant/ 25% - 50%","15":"25"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="process-source-data" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Process source
+data</h1>
+<div id="clean-data" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Clean data</h2>
+<p>Abundance values:</p>
+<pre class="r"><code>occurrences %&gt;% count(abundantie)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["abundantie"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"A / Abundant/ 25% - 50%","2":"432"},{"1":"D / Dominant / >50%","2":"585"},{"1":"F / Frequent / 5% - 25%","2":"479"},{"1":"O / Occasional / >5%","2":"348"},{"1":"O / Occasional / >5%O / Occasional / >5%","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The value <code>O / Occasional / &gt;5%O / Occasional / &gt;5%</code>
+is of course a typo. We improve it:</p>
+<pre class="r"><code>occurrences$abundantie &lt;-  recode(
+  occurrences$abundantie,
+  &quot;O / Occasional / &gt;5%O / Occasional / &gt;5%&quot; = &quot;O / Occasional / &gt;5%&quot;
+)</code></pre>
+<p>Check improved values:</p>
+<pre class="r"><code>occurrences %&gt;% count(abundantie)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["abundantie"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"A / Abundant/ 25% - 50%","2":"432"},{"1":"D / Dominant / >50%","2":"585"},{"1":"F / Frequent / 5% - 25%","2":"479"},{"1":"O / Occasional / >5%","2":"349"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="add-scientific-name-where-missing" class="section level2"
+number="3.2">
+<h2><span class="header-section-number">3.2</span> Add scientific name
+where missing</h2>
+<p>Column <code>soort</code> contains vernacular names in Dutch,
+sometimes with the scientific name as prefix:</p>
+<pre class="r"><code>occurrences %&gt;%
+  distinct(soort)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["soort"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"Reuzenbalsemien / Impatiens glandulifera"},{"1":"Japanse duizendknoop/Fallopia japanica"},{"1":"Parelvederkruid / Myriophyllum aquaticum"},{"1":"Reuzenberenklauw / Heracleum mantegazzianum"},{"1":"roze waterlelie"},{"1":"brede waterpest"},{"1":"smalle waterpest"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>We add the scientific name where missing: -
+<code>roze waterlelie</code>: <em>Nymphaea marliacea</em> -
+<code>brede waterpest</code>: <em>Elodea canadensis</em> -
+<code>smalle waterpest</code>: <em>Elodea nuttallii</em></p>
+<pre class="r"><code>occurrences &lt;-
+  occurrences %&gt;%
+  mutate(soort = recode(
+    soort,
+    &quot;roze waterlelie&quot; = &quot;roze waterlelie / Nymphaea marliacea&quot;,
+    &quot;brede waterpest&quot; = &quot;brede waterpest / Elodea canadensis&quot;,
+    &quot;smalle waterpest&quot; = &quot;smalle waterpest / Elodea nuttallii&quot;
+  )
+)</code></pre>
+<p>Show distinct values of column <code>soort</code>:</p>
+<pre class="r"><code>occurrences %&gt;% 
+  distinct(soort)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["soort"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"Reuzenbalsemien / Impatiens glandulifera"},{"1":"Japanse duizendknoop/Fallopia japanica"},{"1":"Parelvederkruid / Myriophyllum aquaticum"},{"1":"Reuzenberenklauw / Heracleum mantegazzianum"},{"1":"roze waterlelie / Nymphaea marliacea"},{"1":"brede waterpest / Elodea canadensis"},{"1":"smalle waterpest / Elodea nuttallii"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="tidy-data" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Tidy data</h2>
+<p>Extract vernacular names from column <code>soort</code>:</p>
+<pre class="r"><code>occurrences &lt;- 
+  occurrences %&gt;%
+  mutate(
+    vernacularName = stringr::str_extract(
+      string = .data$soort,
+      pattern = &quot;(.*?)(?=\\/)&quot;)) %&gt;%
+  mutate(vernacularName = stringr::str_trim(.data$vernacularName))</code></pre>
+<p>Extract scientific names from column <code>soort</code>:</p>
+<pre class="r"><code>occurrences &lt;- 
+  occurrences %&gt;%
+  mutate(
+    scientificName = stringr::str_extract(
+      string = .data$soort,
+      pattern = &quot;(?&lt;=\\/)(.*)&quot;)) %&gt;%
+  mutate(scientificName = stringr::str_trim(scientificName))</code></pre>
+<p>Mapped values:</p>
+<pre class="r"><code>occurrences %&gt;% distinct(scientificName, vernacularName)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["vernacularName"],"name":[1],"type":["chr"],"align":["left"]},{"label":["scientificName"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"Reuzenbalsemien","2":"Impatiens glandulifera"},{"1":"Japanse duizendknoop","2":"Fallopia japanica"},{"1":"Parelvederkruid","2":"Myriophyllum aquaticum"},{"1":"Reuzenberenklauw","2":"Heracleum mantegazzianum"},{"1":"roze waterlelie","2":"Nymphaea marliacea"},{"1":"brede waterpest","2":"Elodea canadensis"},{"1":"smalle waterpest","2":"Elodea nuttallii"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div id="create-database" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Create database</h1>
+<p>Create a SQLite database with the source data, so it can be queried
+with SQL in the next steps:</p>
+<pre class="r"><code>message(&quot;Create in memory SQLite database...&quot;)
+con &lt;- DBI::dbConnect(RSQLite::SQLite(), &quot;:memory:&quot;)
+# import occurrences
+DBI::dbWriteTable(con, &quot;occurrences&quot;, occurrences)
+message(&quot;DONE&quot;)</code></pre>
+</div>
+<div id="darwin-core-mapping" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Darwin Core
+mapping</h1>
+<p>Create <a
+href="https://rs.gbif.org/core/dwc_event_2022-02-02.xml">Event</a>
+core:</p>
+<pre class="r"><code>dwc_event_sql &lt;- glue::glue_sql(
+  readr::read_file(here::here(&quot;sql&quot;, &quot;dwc_event.sql&quot;)),
+  .con = con
+)
+dwc_event &lt;- DBI::dbGetQuery(con, dwc_event_sql)</code></pre>
+<p>Create <a
+href="https://rs.gbif.org/core/dwc_occurrence_2022-02-02.xml">Occurrence</a>
+extension:</p>
+<pre class="r"><code>message(&quot;Map occurrences to DwC...&quot;)
+dwc_occurrence_sql &lt;- glue::glue_sql(
+  readr::read_file(here::here(&quot;sql&quot;, &quot;dwc_occurrence.sql&quot;)), 
+  .con = con
+)
+dwc_occurrence &lt;- DBI::dbGetQuery(con, dwc_occurrence_sql)
+message(&quot;DONE&quot;)</code></pre>
+<p>reate <a
+href="https://rs.gbif.org/extension/dwc/measurements_or_facts_2022-02-02.xml">Measurement
+Or Facts</a> extension:</p>
+<pre class="r"><code>dwc_mof_sql &lt;- glue::glue_sql(
+  readr::read_file(here::here(&quot;sql&quot;, &quot;dwc_mof.sql&quot;)), 
+  .con = con
+)
+dwc_mof &lt;- DBI::dbGetQuery(con, dwc_mof_sql)</code></pre>
+<p>Disconnect from SQLite database:</p>
+<pre class="r"><code>DBI::dbDisconnect(con)</code></pre>
+</div>
+<div id="save-data-to-csv" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Save data to CSV</h1>
+<pre class="r"><code>write_csv(
+  x = dwc_event,
+  file = here::here(&quot;data&quot;, &quot;processed&quot;, &quot;event.csv&quot;),
+  na = &quot;&quot;
+)
+write_csv(
+  x = dwc_occurrence, 
+  file = here::here(&quot;data&quot;, &quot;processed&quot;, &quot;occurrence.csv&quot;),
+  na = &quot;&quot;
+)
+write_csv(
+  x = dwc_mof, 
+  file = here::here(&quot;data&quot;, &quot;processed&quot;, &quot;mof.csv&quot;),
+  na = &quot;&quot;
+)</code></pre>
+</div>
+<div id="test-output" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Test output</h1>
+<p>Load tests and run them to validate the DwC mapping:</p>
+<pre class="r"><code>source(here::here(&quot;tests&quot;, &quot;test_dwc_event_occurrence_mof.R&quot;))</code></pre>
+<pre><code>## 
+## Attaching package: &#39;testthat&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     matches</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     is_null</code></pre>
+<pre><code>## The following objects are masked from &#39;package:readr&#39;:
+## 
+##     edition_get, local_edition</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     matches</code></pre>
+<pre><code>## Rows: 1845 Columns: 20
+## ── Column specification ──────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (15): type, language, license, rightsHolder, institutionCode, datasetNa...
+## dbl   (3): decimalLatitude, decimalLongitude, coordinateUncertaintyInMeters
+## lgl   (1): datasetID
+## date  (1): eventDate
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 1845 Columns: 11
+## ── Column specification ──────────────────────
+## Delimiter: &quot;,&quot;
+## chr (10): eventID, basisOfRecord, occurrenceID, occurrenceStatus, organismQu...
+## dbl  (1): individualCount
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 4557 Columns: 4
+## ── Column specification ──────────────────────
+## Delimiter: &quot;,&quot;
+## chr (4): eventID, measurementType, measurementValue, measurementUnit
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## Test passed 🥳
+## Test passed 😸
+## Test passed 😀
+## Test passed 🎉
+## Test passed 🎉
+## Test passed 😀
+## Test passed 😀
+## Test passed 🥳
+## Test passed 😸
+## Test passed 🎉
+## Test passed 😸
+## Test passed 🎊
+## Test passed 🎉
+## Test passed 🥇
+## Test passed 🥳
+## Test passed 🌈
+## Test passed 🥳
+## Test passed 🥳
+## Test passed 🌈
+## Test passed 🎉
+## Test passed 🥇
+## Test passed 🥳
+## Test passed 🥳
+## Test passed 🌈
+## Test passed 🥳
+## Test passed 🥇
+## Test passed 🎉
+## Test passed 🥳
+## Test passed 🎉
+## Test passed 🌈
+## Test passed 🥇
+## Test passed 🥇
+## Test passed 😀
+## Test passed 😸
+## Test passed 😸</code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

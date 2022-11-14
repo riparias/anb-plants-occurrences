@@ -13,12 +13,10 @@ SELECT
   'Monitoring of LIFE RIPARIAS invasive alien plants in the Flemish part of the LIFE RIPARIAS areas' AS datasetName,
   'HumanObservation'                    AS basisOfRecord,
   'targeted monitoring'                 AS samplingProtocol,
--- OCCURRENCE
-  o."_record_id"                        AS occurrenceID,
 -- EVENT
   o."_record_id"                        AS eventID,
-  date(o."_created_at")                 AS eventDate,
-  time(o."_created_at")                 AS eventTime,
+  DATE(SUBSTR(o."_created_at", 1, 19))  AS eventDate,
+  TIME(SUBSTR(o."_created_at", 1, 19)) || 'Z'  AS eventTime,
 -- LOCATION
   'BE'                                  AS countryCode,
   CASE
@@ -94,27 +92,51 @@ SELECT
 	  WHEN o."Waterloop" = 'Oude platte beek' THEN 'Oude platte beek'
 	  WHEN o."Waterloop" = 'Rilroheidebeek' THEN 'Rilroheidebeek'
 	  ELSE NULL
-  END                                   AS waterBody
+  END                                   AS waterBody,
   CASE
+    WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever,Tussen de 10 en 20m van de waterloop' THEN 'on the riverbank | within 5 meters of the riverbank | between 10 and 20 meters of the riverbank'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever,Tussen de 10 en 20m van de waterloop,Tussen de 5 en 10m van de waterloop' THEN 'on the riverbank | within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank'
+    WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop,Verder dan 50 meter van de waterloop,heel industrieterrein staat vol' THEN 'on the riverbank | within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank | in the entire industrial area'
+    WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop,Verder dan 50 meter van de waterloop,heel industrieterrein  staat vol' THEN 'on the riverbank | within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank | in the entire industrial area'
+    WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Verder dan 50 meter van de waterloop' THEN 'on the riverbank | within 5 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank'
+    WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop' THEN 'on the riverbank | within 5 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank'
+    WHEN o."locatie" = 'Verder dan 50 meter van de waterloop,naast sppoorweg' THEN 'further than 50 meters of the riverbank | next to the railway'
+    WHEN o."locatie" = 'In waterelement,Op de oever' THEN 'in the water | on the riverbank'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever,Tussen de 5 en 10m van de waterloop' THEN 'on the riverbank | within 5 meters of the riverbank | between 5 and 10 meters of the riverbank'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever' THEN 'on the riverbank | within 5 meters of the riverbank'
+    WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,In waterelement,Op de oever' THEN 'in the water | on the riverbank | within 5 meters of the riverbank'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop' THEN 'on the riverbank | within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank'
+    WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Tussen de 10 en 20m van de waterloop' THEN 'within 5 meters of the riverbank | between 10 and 20 meters of the riverbank'
     WHEN o."locatie" = 'Op de oever' THEN 'on the riverbank'
+    WHEN o."locatie" = 'Op de oever,oever vijver' THEN 'on the riverbank'
+    WHEN o."locatie" = 'In waterelement' THEN 'in the water'
+    WHEN o."locatie" = 'naast weg' THEN 'next to the road'
+    WHEN o."locatie" = 'Op de oever,Tussen de 5 en 10m van de waterloop' THEN 'on the riverbank | between 5 and 10 meters of the riverbank'
+    WHEN o."locatie" = 'Op de oever,Tussen de 10 en 20m van de waterloop' THEN 'on the riverbank | between 10 and 20 meters of the riverbank'
+    WHEN o."locatie" = 'Op de oever,Tussen de 10 en 20m van de waterloop,Tussen de 5 en 10m van de waterloop' THEN 'on the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank'
     WHEN o."locatie" = 'Verder dan 50 meter van de waterloop' THEN 'further than 50 meters of the riverbank'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop,Verder dan 50 meter van de waterloop' THEN 'on the riverbank | within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank'
+    WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop,Verder dan 50 meter van de waterloop,naast wegen en fietspad ,en op industrie terrein' THEN 'on the riverbank | within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank | next to roads and bike path | in the industrial area'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop,Verder dan 50 meter van de waterloop' THEN 'within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank'
+    WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop,Verder dan 50 meter van de waterloop,rond vijver' THEN 'within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank | around the pond'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop' THEN 'within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Op de oever,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop,Verder dan 50 meter van de waterloop' THEN 'on the riverbank | within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank'
+    WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,In waterelement,Op de oever,Tussen de 5 en 10m van de waterloop' THEN 'in the water | on the riverbank | within 5 meters of the riverbank | between 5 and 10 meters of the riverbank'
+    WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,In waterelement,Op de oever,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop,Verder dan 50 meter van de waterloop' THEN 'in the water | on the riverbank | within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank'
     WHEN o."locatie" = 'Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop,Verder dan 50 meter van de waterloop' THEN 'between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank'
+    WHEN o."locatie" = 'Tussen de 10 en 20m van de waterloop,Tussen de 5 en 10m van de waterloop' THEN 'between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank'
+    WHEN o."locatie" = 'Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop' THEN 'between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank'
+    WHEN o."locatie" = 'Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Verder dan 50 meter van de waterloop' THEN 'between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop' THEN 'within 5 meters of the riverbank'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Verder dan 50 meter van de waterloop' THEN 'within 5 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank'
     WHEN o."locatie" = 'Tussen de 5 en 10m van de waterloop' THEN 'between 5 and 10 meters of the riverbank'
+    WHEN o."locatie" = 'Tussen de 5 en 10m van de waterloop,langs zijloop' THEN 'between 5 and 10 meters of the riverbank | along the sidewalk'
     WHEN o."locatie" = 'Tussen de 20 en 50m van de waterloop' THEN 'between 20 and 50 meters of the riverbank'
     WHEN o."locatie" = 'Tussen de 20 en 50m van de waterloop,Verder dan 50 meter van de waterloop' THEN 'between 20 and 50 meters of the riverbank | further than 50 meters of the riverbank'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Tussen de 5 en 10m van de waterloop' THEN 'within 5 meters of the riverbank | between 5 and 10 meters of the riverbank'
     WHEN o."locatie" = 'Binnen de 5 meter van de waterloop,Tussen de 10 en 20m van de waterloop,Tussen de 5 en 10m van de waterloop' THEN 'within 5 meters of the riverbank | between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank'
     WHEN o."locatie" = 'Tussen de 10 en 20m van de waterloop' THEN 'between 10 and 20 meters of the riverbank'
+    WHEN o."locatie" = 'Tussen de 10 en 20m van de waterloop,Tussen de 20 en 50m van de waterloop,Tussen de 5 en 10m van de waterloop' THEN 'between 5 and 10 meters of the riverbank | between 10 and 20 meters of the riverbank | between 20 and 50 meters of the riverbank'
     ELSE NULL
   END                                   AS locationRemarks,
   printf('%.5f', ROUND(o."_latitude", 5)) AS decimalLatitude,

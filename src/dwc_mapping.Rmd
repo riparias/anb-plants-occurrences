@@ -58,7 +58,8 @@ Create a data frame `occurrences` from the source data:
 ```{r read_data}
 occurrences <- readxl::read_excel(
   path = here("data", "raw", "Plantenmonitoring RIPARIAS (Vlaanderen).xlsx"),
-  sheet = "Data_inventarisaties_opgekuist")
+  sheet = "Data_inventarisaties_opgekuist",
+  col_types = "text")
 ```
 
 Preview data:
@@ -68,6 +69,29 @@ occurrences %>% head(n = 10)
 ```
 
 # Process source data
+
+## Clean data
+
+Abundance values:
+
+```{r abundantie}
+occurrences %>% count(abundantie)
+```
+
+The value `O / Occasional / >5%O / Occasional / >5%` is of course a typo. We improve it:
+
+```{r improve_abundantie}
+occurrences$abundantie <-  recode(
+  occurrences$abundantie,
+  "O / Occasional / >5%O / Occasional / >5%" = "O / Occasional / >5%"
+)
+```
+
+Check improved values:
+
+```{r check_improved_abundantie}
+occurrences %>% count(abundantie)
+```
 
 ## Add scientific name where missing
 
@@ -170,12 +194,46 @@ dwc_occurrence <- DBI::dbGetQuery(con, dwc_occurrence_sql)
 message("DONE")
 ```
 
+reate [Measurement Or Facts](https://rs.gbif.org/extension/dwc/measurements_or_facts_2022-02-02.xml) extension:
+
+```{r mof}
+dwc_mof_sql <- glue::glue_sql(
+  readr::read_file(here::here("sql", "dwc_mof.sql")), 
+  .con = con
+)
+dwc_mof <- DBI::dbGetQuery(con, dwc_mof_sql)
+```
+
+Disconnect from SQLite database:
+
+```{r disconnect}
+DBI::dbDisconnect(con)
+```
+
 # Save data to CSV
 
 ```{r save_csv}
-write_csv(dwc_event, here::here("data", "processed", "event.csv"), na = "")
 write_csv(
-  dwc_occurrence, here::here("data", "processed", "occurrence.csv"),
+  x = dwc_event,
+  file = here::here("data", "processed", "event.csv"),
   na = ""
 )
+write_csv(
+  x = dwc_occurrence, 
+  file = here::here("data", "processed", "occurrence.csv"),
+  na = ""
+)
+write_csv(
+  x = dwc_mof, 
+  file = here::here("data", "processed", "mof.csv"),
+  na = ""
+)
+```
+
+# Test output
+
+Load tests and run them to validate the DwC mapping:
+
+```{r run_tests, message = TRUE}
+source(here::here("tests", "test_dwc_event_occurrence_mof.R"))
 ```

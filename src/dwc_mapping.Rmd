@@ -234,6 +234,6 @@ write_csv(
 
 Load tests and run them to validate the DwC mapping:
 
-```{r run_tests, message = TRUE}
+```{r run_tests}
 source(here::here("tests", "test_dwc_event_occurrence_mof.R"))
 ```

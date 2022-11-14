@@ -102,7 +102,7 @@ occurrences %>%
   distinct(soort)
 ```
 We add the scientific name where missing:
-- `roze waterlelie`: _Nymphaea marliacea_
+- `roze waterlelie`: _Nymphaea ×marliacea_
 - `brede waterpest`: _Elodea canadensis_
 - `smalle waterpest`: _Elodea nuttallii_
 
@@ -111,7 +111,7 @@ occurrences <-
   occurrences %>%
   mutate(soort = recode(
     soort,
-    "roze waterlelie" = "roze waterlelie / Nymphaea marliacea",
+    "roze waterlelie" = "roze waterlelie / Nymphaea ×marliacea",
     "brede waterpest" = "brede waterpest / Elodea canadensis",
     "smalle waterpest" = "smalle waterpest / Elodea nuttallii"
   )

@@ -445,14 +445,14 @@ sometimes with the scientific name as prefix:</p>
   </script>
 </div>
 <p>We add the scientific name where missing: -
-<code>roze waterlelie</code>: <em>Nymphaea marliacea</em> -
+<code>roze waterlelie</code>: <em>Nymphaea ×marliacea</em> -
 <code>brede waterpest</code>: <em>Elodea canadensis</em> -
 <code>smalle waterpest</code>: <em>Elodea nuttallii</em></p>
 <pre class="r"><code>occurrences &lt;-
   occurrences %&gt;%
   mutate(soort = recode(
     soort,
-    &quot;roze waterlelie&quot; = &quot;roze waterlelie / Nymphaea marliacea&quot;,
+    &quot;roze waterlelie&quot; = &quot;roze waterlelie / Nymphaea ×marliacea&quot;,
     &quot;brede waterpest&quot; = &quot;brede waterpest / Elodea canadensis&quot;,
     &quot;smalle waterpest&quot; = &quot;smalle waterpest / Elodea nuttallii&quot;
   )
@@ -462,7 +462,7 @@ sometimes with the scientific name as prefix:</p>
   distinct(soort)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["soort"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"Reuzenbalsemien / Impatiens glandulifera"},{"1":"Japanse duizendknoop/Fallopia japanica"},{"1":"Parelvederkruid / Myriophyllum aquaticum"},{"1":"Reuzenberenklauw / Heracleum mantegazzianum"},{"1":"roze waterlelie / Nymphaea marliacea"},{"1":"brede waterpest / Elodea canadensis"},{"1":"smalle waterpest / Elodea nuttallii"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["soort"],"name":[1],"type":["chr"],"align":["left"]}],"data":[{"1":"Reuzenbalsemien / Impatiens glandulifera"},{"1":"Japanse duizendknoop/Fallopia japanica"},{"1":"Parelvederkruid / Myriophyllum aquaticum"},{"1":"Reuzenberenklauw / Heracleum mantegazzianum"},{"1":"roze waterlelie / Nymphaea ×marliacea"},{"1":"brede waterpest / Elodea canadensis"},{"1":"smalle waterpest / Elodea nuttallii"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -488,7 +488,7 @@ sometimes with the scientific name as prefix:</p>
 <pre class="r"><code>occurrences %&gt;% distinct(scientificName, vernacularName)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["vernacularName"],"name":[1],"type":["chr"],"align":["left"]},{"label":["scientificName"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"Reuzenbalsemien","2":"Impatiens glandulifera"},{"1":"Japanse duizendknoop","2":"Fallopia japanica"},{"1":"Parelvederkruid","2":"Myriophyllum aquaticum"},{"1":"Reuzenberenklauw","2":"Heracleum mantegazzianum"},{"1":"roze waterlelie","2":"Nymphaea marliacea"},{"1":"brede waterpest","2":"Elodea canadensis"},{"1":"smalle waterpest","2":"Elodea nuttallii"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["vernacularName"],"name":[1],"type":["chr"],"align":["left"]},{"label":["scientificName"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"Reuzenbalsemien","2":"Impatiens glandulifera"},{"1":"Japanse duizendknoop","2":"Fallopia japanica"},{"1":"Parelvederkruid","2":"Myriophyllum aquaticum"},{"1":"Reuzenberenklauw","2":"Heracleum mantegazzianum"},{"1":"roze waterlelie","2":"Nymphaea ×marliacea"},{"1":"brede waterpest","2":"Elodea canadensis"},{"1":"smalle waterpest","2":"Elodea nuttallii"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -557,41 +557,41 @@ write_csv(
 <h1><span class="header-section-number">7</span> Test output</h1>
 <p>Load tests and run them to validate the DwC mapping:</p>
 <pre class="r"><code>source(here::here(&quot;tests&quot;, &quot;test_dwc_event_occurrence_mof.R&quot;))</code></pre>
-<pre><code>## Test passed 🌈
+<pre><code>## Test passed 😀
+## Test passed 🌈
 ## Test passed 🎊
+## Test passed 🥇
+## Test passed 🎊
+## Test passed 😀
 ## Test passed 🎉
 ## Test passed 🎊
 ## Test passed 😀
-## Test passed 😸
 ## Test passed 😀
-## Test passed 🎉
-## Test passed 😀
-## Test passed 🎊
 ## Test passed 🎊
 ## Test passed 🥳
+## Test passed 🥳
+## Test passed 🌈
+## Test passed 🎊
+## Test passed 🎊
 ## Test passed 😸
-## Test passed 🎉
 ## Test passed 🥇
+## Test passed 🥳
 ## Test passed 🎉
 ## Test passed 🌈
-## Test passed 🥇
-## Test passed 🌈
-## Test passed 🥇
-## Test passed 🎉
-## Test passed 🥇
-## Test passed 😀
-## Test passed 😀
 ## Test passed 😸
-## Test passed 🥳
-## Test passed 🎊
-## Test passed 🎊
-## Test passed 🥳
-## Test passed 🥳
-## Test passed 🎊
-## Test passed 🎊
+## Test passed 😀
+## Test passed 🌈
+## Test passed 😀
 ## Test passed 🥇
-## Test passed 🎊
-## Test passed 🥇</code></pre>
+## Test passed 😀
+## Test passed 🌈
+## Test passed 😸
+## Test passed 🎉
+## Test passed 🌈
+## Test passed 😸
+## Test passed 🌈
+## Test passed 😀
+## Test passed 😸</code></pre>
 </div>
 
 

@@ -180,7 +180,7 @@ testthat::test_that("scientificName is never NA and one of the list", {
     "Fallopia japanica",
     "Myriophyllum aquaticum",
     "Heracleum mantegazzianum",
-    "Nymphaea marliacea",
+    "Nymphaea ×marliacea",
     "Elodea canadensis",
     "Elodea nuttallii"
   )

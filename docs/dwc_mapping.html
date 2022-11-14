@@ -328,7 +328,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">anb-crayfishes-occurrences</a>
+      <a class="navbar-brand" href="index.html">anb-plants-occurrences</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -338,7 +338,7 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/riparias/anb-crayfishes-occurrences">
+  <a href="https://github.com/riparias/anb-plants-occurrences">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -524,7 +524,7 @@ dwc_occurrence_sql &lt;- glue::glue_sql(
 )
 dwc_occurrence &lt;- DBI::dbGetQuery(con, dwc_occurrence_sql)
 message(&quot;DONE&quot;)</code></pre>
-<p>reate <a
+<p>Create <a
 href="https://rs.gbif.org/extension/dwc/measurements_or_facts_2022-02-02.xml">Measurement
 Or Facts</a> extension:</p>
 <pre class="r"><code>dwc_mof_sql &lt;- glue::glue_sql(
@@ -572,7 +572,7 @@ write_csv(
 ## 
 ##     matches</code></pre>
 <pre><code>## Rows: 1845 Columns: 20
-## ── Column specification ──────────────────────
+## ── Column specification ──────
 ## Delimiter: &quot;,&quot;
 ## chr  (15): type, language, license, rightsHolder, institutionCode, datasetNa...
 ## dbl   (3): decimalLatitude, decimalLongitude, coordinateUncertaintyInMeters
@@ -582,7 +582,7 @@ write_csv(
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ## Rows: 1845 Columns: 11
-## ── Column specification ──────────────────────
+## ── Column specification ──────
 ## Delimiter: &quot;,&quot;
 ## chr (10): eventID, basisOfRecord, occurrenceID, occurrenceStatus, organismQu...
 ## dbl  (1): individualCount
@@ -590,47 +590,47 @@ write_csv(
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ## Rows: 4557 Columns: 4
-## ── Column specification ──────────────────────
+## ── Column specification ──────
 ## Delimiter: &quot;,&quot;
 ## chr (4): eventID, measurementType, measurementValue, measurementUnit
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre><code>## Test passed 🥳
-## Test passed 😸
-## Test passed 😀
-## Test passed 🎉
-## Test passed 🎉
-## Test passed 😀
-## Test passed 😀
+<pre><code>## Test passed 🎉
+## Test passed 🎊
+## Test passed 🥇
 ## Test passed 🥳
-## Test passed 😸
+## Test passed 😀
+## Test passed 🌈
+## Test passed 🌈
+## Test passed 😀
+## Test passed 😀
 ## Test passed 🎉
-## Test passed 😸
+## Test passed 🥳
+## Test passed 😀
+## Test passed 🌈
+## Test passed 🥇
 ## Test passed 🎊
 ## Test passed 🎉
-## Test passed 🥇
-## Test passed 🥳
-## Test passed 🌈
-## Test passed 🥳
-## Test passed 🥳
-## Test passed 🌈
-## Test passed 🎉
-## Test passed 🥇
-## Test passed 🥳
-## Test passed 🥳
-## Test passed 🌈
-## Test passed 🥳
-## Test passed 🥇
-## Test passed 🎉
-## Test passed 🥳
-## Test passed 🎉
-## Test passed 🌈
-## Test passed 🥇
-## Test passed 🥇
-## Test passed 😀
+## Test passed 🎊
 ## Test passed 😸
-## Test passed 😸</code></pre>
+## Test passed 🥇
+## Test passed 🥇
+## Test passed 🎊
+## Test passed 🎉
+## Test passed 😀
+## Test passed 🥇
+## Test passed 😸
+## Test passed 🥳
+## Test passed 🎉
+## Test passed 😀
+## Test passed 🥳
+## Test passed 🎊
+## Test passed 🎉
+## Test passed 🥳
+## Test passed 🥳
+## Test passed 😀
+## Test passed 😀</code></pre>
 </div>
 
 

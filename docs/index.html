@@ -298,11 +298,11 @@ href="https://ipt.gbif.org/manual/en/ipt/2.5/">GBIF IPT</a>.</p>
 <div id="workflow" class="section level2">
 <h2>Workflow</h2>
 <p><a
-href="https://github.com/riparias/anb-crayfishes-occurrences/tree/main/data/raw">source
+href="https://github.com/riparias/anb-plants-occurrences/tree/main/data/raw">source
 data</a> → Darwin Core <a
-href="https://riparias.github.io/anb-crayfishes-occurrences/dwc_mapping.html">mapping
+href="https://riparias.github.io/anb-plants-occurrences/dwc_mapping.html">mapping
 script</a> → generated <a
-href="https://github.com/riparias/anb-crayfishes-occurrences/tree/main/data/processed">Darwin
+href="https://github.com/riparias/anb-plants-occurrences/tree/main/data/processed">Darwin
 Core files</a></p>
 </div>
 <div id="published-dataset" class="section level2">
@@ -322,12 +322,13 @@ recipe</a>. Files and directories indicated with <code>GENERATED</code>
 should not be edited manually.</p>
 <pre><code>├── README.md              : Description of this repository
 ├── LICENSE                : Repository license
-├── anb-crayfishes-occurrences.Rproj : RStudio project file
+├── anb-plants-occurrences.Rproj : RStudio project file
 ├── .gitignore             : Files and directories to be ignored by git
 |
 ├── sql                    : Darwin Core transformations
 │   ├── dwc_event.sql
-│   └── dwc_occurrence.sql
+│   ├── dwc_occurrence.sql
+│   └── dwc_mof.sql
 |
 ├── src
 │   ├── dwc_mapping.Rmd    : Darwin Core mapping script

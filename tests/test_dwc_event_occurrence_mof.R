@@ -107,7 +107,7 @@ testthat::test_that("Right columns in right order in occurrence extension", {
     "individualCount",
     "occurrenceStatus",
     "organismQuantity",
-    "organismQUantityType",
+    "organismQuantityType",
     "scientificName",
     "vernacularName",
     "kingdom",
@@ -159,8 +159,8 @@ testthat::test_that("organismQuantity is always filled in and one of DAFO", {
 })
 
 testthat::test_that("organismQuantityType is always filled in and is always DAFOR scale", {
-  testthat::expect_true(all(!is.na(dwc_occurrence$organismQUantityType)))
-  testthat::expect_equal(unique(dwc_occurrence$organismQUantityType), "DAFOR Scale")
+  testthat::expect_true(all(!is.na(dwc_occurrence$organismQuantityType)))
+  testthat::expect_equal(unique(dwc_occurrence$organismQuantityType), "DAFOR Scale")
 })
 
 

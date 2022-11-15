@@ -25,7 +25,7 @@ SELECT
     WHEN o."abundantie" = 'O / Occasional / >5%' THEN 'O'
     ELSE NULL
   END                                   AS organismQuantity,
-  "DAFOR Scale"                         AS organismQUantityType,
+  "DAFOR Scale"                         AS organismQuantityType,
   o."scientificName"                    AS scientificName,
   o."vernacularName"                    AS vernacularName,
   'Plantae'                             AS kingdom,

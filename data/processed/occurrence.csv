@@ -1,4 +1,4 @@
-eventID,basisOfRecord,occurrenceID,individualCount,occurrenceStatus,organismQuantity,organismQUantityType,scientificName,vernacularName,kingdom,taxonRank
+eventID,basisOfRecord,occurrenceID,individualCount,occurrenceStatus,organismQuantity,organismQuantityType,scientificName,vernacularName,kingdom,taxonRank
 0004214c-7ac9-461f-abbe-97792ab09214,HumanObservation,0004214c-7ac9-461f-abbe-97792ab09214,,present,A,DAFOR Scale,Impatiens glandulifera,Reuzenbalsemien,Plantae,species
 000a85db-16ca-42a3-aa7e-6f4dd2c17b63,HumanObservation,000a85db-16ca-42a3-aa7e-6f4dd2c17b63,,present,A,DAFOR Scale,Impatiens glandulifera,Reuzenbalsemien,Plantae,species
 004e3362-9645-4d0a-b2e7-237aabc4ddce,HumanObservation,004e3362-9645-4d0a-b2e7-237aabc4ddce,,present,D,DAFOR Scale,Fallopia japanica,Japanse duizendknoop,Plantae,species

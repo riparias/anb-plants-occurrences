@@ -10,7 +10,7 @@ SELECT
   'ANB'                                 AS rightsHolder,
   ''                                    AS datasetID,
   'ANB'                                 AS institutionCode,
-  'Monitoring of LIFE RIPARIAS invasive alien plants in the Flemish part of the LIFE RIPARIAS areas' AS datasetName,
+  'Monitoring of invasive alien plants in the LIFE RIPARIAS areas in Flanders, Belgium' AS datasetName,
   'HumanObservation'                    AS basisOfRecord,
   'targeted monitoring'                 AS samplingProtocol,
 -- EVENT

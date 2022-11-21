@@ -22,18 +22,3 @@ SELECT
   '%'                                   AS measurementUnit
   FROM occurrences as o
   WHERE o."bedekking_" IS NOT NULL
-
-UNION
-
--- river bank
-SELECT
-  o."_record_id"                        AS eventID,
-  'river bank'                          AS measurementType,
-  CASE
-    WHEN o."oever" = 'Beide oevers' THEN 'both'
-    WHEN o."oever" = 'Linker oever' THEN 'left'
-    WHEN o."oever" = 'Rechter oever' THEN 'right'
-    ELSE NULL
-  END                                   AS measurementValue,
-  NULL                                  AS measurementUnit
-FROM occurrences as o

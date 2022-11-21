@@ -18,7 +18,7 @@ UNION
 SELECT
   o."_record_id"                        AS eventID,
   'coverage'                            AS measurementType,
-  o."bedekking_"                        AS measurementValue,
+  SUBSTR(o."bedekking_", 1,LENGTH(o."bedekking_")-1) AS measurementValue,
   '%'                                   AS measurementUnit
   FROM occurrences as o
   WHERE o."bedekking_" IS NOT NULL

@@ -15,6 +15,7 @@ SELECT
     WHEN o."geschatte_" =  '3 ex' THEN 3
     WHEN o."geschatte_" =  '4 exemplaren' THEN 4
     WHEN o."geschatte_" =  '5 exemplaren' THEN 5
+    WHEN o."geschatte_" =  '5p' THEN 5
     ELSE NULL
   END                                   AS individualCount,
   'present'                             AS occurrenceStatus,

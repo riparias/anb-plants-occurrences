@@ -15,9 +15,16 @@ SELECT
     WHEN o."geschatte_" =  '3 ex' THEN 3
     WHEN o."geschatte_" =  '4 exemplaren' THEN 4
     WHEN o."geschatte_" =  '5 exemplaren' THEN 5
+    WHEN o."geschatte_" =  '5p' THEN 5
     ELSE NULL
   END                                   AS individualCount,
   'present'                             AS occurrenceStatus,
+  CASE
+    WHEN o."oever" = 'Beide oevers' THEN 'River bank: both'
+    WHEN o."oever" = 'Linker oever' THEN 'River bank: left'
+    WHEN o."oever" = 'Rechter oever' THEN 'River bank: right'
+    ELSE NULL
+  END                                   AS occurrenceRemarks,
   CASE
     WHEN o."abundantie" = 'D / Dominant / >50%' THEN 'D'
     WHEN o."abundantie" = 'A / Abundant/ 25% - 50%' THEN 'A'

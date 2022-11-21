@@ -6,11 +6,18 @@ Created by Damiano Oldoni (INBO)
 SELECT
   o."_record_id"                        AS eventID,
   'estimated covered area'              AS measurementType,
-  o."geschatte_"                        AS measurementValue,
+  CASE
+    WHEN o."geschatte_" = '10000 voornamelijk langsheen afgesneden armen' THEN '10000'
+    WHEN o."geschatte_" = '20m2' THEN '20'
+    WHEN o."geschatte_" = '100m' THEN '100'
+    WHEN o."geschatte_" = '0,5' THEN '0.5'
+    ELSE o."geschatte_"
+  END                                   AS measurementValue,
   'm²'                                  AS measurementUnit
   FROM occurrences as o
-  WHERE o."geschatte_" NOT LIKE "%ex" AND
-    CAST(o."geschatte_" AS NUMERIC) > 0
+  WHERE o."geschatte_" NOT LIKE "%ex%" AND
+  	o."geschatte_" != '5p' AND
+  	o."geschatte_" IS NOT NULL
 
 UNION
 
@@ -18,22 +25,7 @@ UNION
 SELECT
   o."_record_id"                        AS eventID,
   'coverage'                            AS measurementType,
-  o."bedekking_"                        AS measurementValue,
+  SUBSTR(o."bedekking_", 1,LENGTH(o."bedekking_")-1) AS measurementValue,
   '%'                                   AS measurementUnit
   FROM occurrences as o
   WHERE o."bedekking_" IS NOT NULL
-
-UNION
-
--- river bank
-SELECT
-  o."_record_id"                        AS eventID,
-  'river bank'                          AS measurementType,
-  CASE
-    WHEN o."oever" = 'Beide oevers' THEN 'both'
-    WHEN o."oever" = 'Linker oever' THEN 'left'
-    WHEN o."oever" = 'Rechter oever' THEN 'right'
-    ELSE NULL
-  END                                   AS measurementValue,
-  NULL                                  AS measurementUnit
-FROM occurrences as o

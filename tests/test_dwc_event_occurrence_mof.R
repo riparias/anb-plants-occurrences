@@ -106,6 +106,7 @@ testthat::test_that("Right columns in right order in occurrence extension", {
     "occurrenceID",
     "individualCount",
     "occurrenceStatus",
+    "occurrenceRemarks",
     "organismQuantity",
     "organismQuantityType",
     "scientificName",
@@ -227,15 +228,35 @@ testthat::test_that("All eventIDs are in event core ", {
 testthat::test_that("measurementType is always filled in and one of the list", {
   testthat::expect_true(all(!is.na(dwc_mof$measurementType)))
   testthat::expect_equal(unique(dwc_mof$measurementType),
-                         c("estimated covered area", "river bank", "coverage")
+                         c("estimated covered area", "coverage")
   )
 })
 
-testthat::test_that("measurementUnit is one of the list", {
+testthat::test_that("measurementUnit is always filled in and one of the list", {
+  testthat::expect_true(all(!is.na(dwc_mof$measurementUnit)))
   testthat::expect_equal(unique(dwc_mof$measurementUnit),
-                         c("m²", NA_character_, "%")
+                         c("m²", "%")
   )
 })
+
+testthat::test_that(
+  "measurementValue is always filled and is a non-negative number", {
+    testthat::expect_true(all(!is.na(dwc_mof$measurementValue)))
+    testthat::expect_true(is.numeric(dwc_mof$measurementValue))
+    testthat::expect_true(all(dwc_mof$measurementValue >= 0))
+})
+
+testthat::test_that(
+  "measurementValue is strictly positive for estimated covered area", {
+    testthat::expect_equal(
+      dwc_mof %>%
+        filter(measurementType == "estimated covered area") %>%
+        filter(measurementValue <= 0) %>%
+        nrow,
+      0
+    )
+  }
+)
 
 testthat::test_that(
   "estimated covered area is always expressed in square meters", {
@@ -260,27 +281,3 @@ testthat::test_that(
     )
   }
 )
-
-testthat::test_that(
-  "river bank has no unit", {
-    testthat::expect_true(all(
-      is.na(dwc_mof %>%
-              filter(measurementType == "river bank") %>%
-              distinct(measurementUnit) %>%
-              pull()
-            )
-      )
-    )
-  }
-)
-
-testthat::test_that(
-  "measurementValue is one of the list if measurementType is river bank", {
-  testthat::expect_equal(
-    dwc_mof %>%
-      filter(measurementType == "river bank") %>%
-      distinct(measurementValue) %>%
-      pull(),
-    c("both", "left", "right")
-  )
-})

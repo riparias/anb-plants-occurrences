@@ -11,7 +11,7 @@ This repository contains the functionality to standardize the crayfishes data fr
 
 ## Published dataset
 
-* [Dataset on the IPT](#) - TBD
+* [Dataset on the IPT](https://ipt.inbo.be/resource?r=anb-plants-occurrences)
 * [Dataset on GBIF](https://doi.org/10.15468/6g56r6)
 
 ## Repo structure

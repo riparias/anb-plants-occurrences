@@ -8,7 +8,7 @@ SELECT
   'en'                                  AS language,
   'http://creativecommons.org/publicdomain/zero/1.0/' AS license,
   'ANB'                                 AS rightsHolder,
-  ''                                    AS datasetID,
+  'https://doi.org/10.15468/6g56r6'                                    AS datasetID,
   'ANB'                                 AS institutionCode,
   'Monitoring of invasive alien plants in the LIFE RIPARIAS areas in Flanders, Belgium' AS datasetName,
   'HumanObservation'                    AS basisOfRecord,
